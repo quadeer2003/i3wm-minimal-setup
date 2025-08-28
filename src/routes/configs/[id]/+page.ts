@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { getConfig } from '$lib/configs';
+import { getConfig } from '../../../../configs';
 import { error } from '@sveltejs/kit';
 
 export const load: PageLoad = async ({ params }) => {

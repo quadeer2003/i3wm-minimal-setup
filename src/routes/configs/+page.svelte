@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { configs } from '$lib/configs';
+  import { configs } from '../../../configs';
   import Nav from '$lib/components/Nav.svelte';
   import Sidebar from '$lib/components/Sidebar.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
