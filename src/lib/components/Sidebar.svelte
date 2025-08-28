@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ConfigMeta } from '../../../../configs';
+  import type { ConfigMeta } from '../../../configs';
   let { items = [], active = null } = $props<{ items?: ConfigMeta[]; active?: string | null }>();
   let mobileMenuOpen = $state(false);
 </script>
