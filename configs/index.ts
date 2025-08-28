@@ -1,6 +1,8 @@
 import i3raw from './i3.config?raw';
 import kittyraw from './kitty.conf?raw';
 import fishraw from './fish.config?raw';
+import picomraw from './picom.config?raw';
+import polybarraw from './polybar.config?raw';
 
 export interface ConfigMeta {
   id: string;
@@ -35,6 +37,22 @@ export const configs: ConfigMeta[] = [
     filename: 'config.fish',
     language: 'fish',
     raw: fishraw
+  },
+  {
+    id: 'picom',
+    name: 'Picom Compositor',
+    description: 'Compositor settings for transparency and shadows.',
+    filename: 'picom.config',
+    language: 'conf',
+    raw: picomraw
+  },
+  {
+    id: 'polybar',
+    name: 'Polybar Status Bar',
+    description: 'Status bar configuration and modules.',
+    filename: 'polybar.config',
+    language: 'ini',
+    raw: polybarraw
   }
 ];
 
