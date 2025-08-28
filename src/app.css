@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+	--background: oklch(94.61% 0.043 211.12);
+	--secondary-background: oklch(100% 0 0);
+	--foreground: oklch(0% 0 0);
+	--main-foreground: oklch(0% 0 0);
+	--main: oklch(76.89% 0.139164 219.13);
+	--border: oklch(0% 0 0);
+	--ring: oklch(0% 0 0);
+	--overlay: oklch(0% 0 0 / 0.8);
+	--shadow: 4px 4px 0px 0px var(--border);
+	--chart-1: #00C8F0;
+	--chart-2: #FF7A05;
+	--chart-3: #7A83FF;
+	--chart-4: #FF4D50;
+	--chart-5: #FACC00;
+	--chart-active-dot: #000;
+	--q7-green: #a3d65c;
+	--q7-dark: #0e1116;
+}
+
+.dark {
+	--background: oklch(27.11% 0.0303 225.38);
+	--secondary-background: oklch(23.93% 0 0);
+	--foreground: oklch(92.49% 0 0);
+	--main-foreground: oklch(0% 0 0);
+	--main: oklch(64.37% 0.1162 218.75);
+	--border: oklch(0% 0 0);
+	--ring: oklch(100% 0 0);
+	--shadow: 4px 4px 0px 0px var(--border);
+	--chart-1: #009DBD;
+	--chart-2: #EB6D00;
+	--chart-3: #7A83FF;
+	--chart-4: #FF6669;
+	--chart-5: #E0B700;
+	--chart-active-dot: #fff;
+	--q7-green: #a3d65c;
+	--q7-dark: #05070c;
+}
+
+body { 
+  color: var(--foreground); 
+  background: var(--background); 
+  font-family:"Cascadia Code","Cascadia Mono","JetBrains Mono",ui-monospace,monospace; 
+  font-weight:500;
+  background-image: 
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 80px 80px;
+  background-position: 0 0, 0 0;
+}
+h1,h2,h3,h4,h5,h6 { font-weight:700; font-family:"Cascadia Code","Cascadia Mono",ui-monospace,monospace; }
+
+.bg-grainy-green { position:relative; min-height:100vh; }
+.bg-grainy-green:before { content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; background:
+	url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='table' tableValues='0 0 0 0.3 0.6 0.8 1'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(%23n)' fill='white'/></svg>") repeat,
+	radial-gradient(circle at 20% 0%, rgba(163,214,92,0.25) 0%, rgba(163,214,92,0) 60%),
+	radial-gradient(circle at 80% 20%, rgba(163,214,92,0.25) 0%, rgba(163,214,92,0) 60%),
+	linear-gradient(180deg,#10131a,var(--color-q7-dark));
+	background-blend-mode:multiply, normal, normal, normal;
+	background-size:200px 200px, auto, auto, auto; image-rendering:pixelated; }
+.dark .bg-grainy-green:before { background:
+	url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='table' tableValues='0 0 0 0.25 0.45 0.75 1'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(%23n)' fill='white'/></svg>") repeat,
+	radial-gradient(circle at 20% 0%, rgba(163,214,92,0.20) 0%, rgba(163,214,92,0) 60%),
+	radial-gradient(circle at 80% 20%, rgba(163,214,92,0.18) 0%, rgba(163,214,92,0) 60%),
+	linear-gradient(180deg,#0b0d11,var(--color-q7-dark)); }
+
+.bg-q7-dark\/90 { background-color: #0a0d11; background-color: color-mix(in oklch, var(--q7-dark) 90%, black); }
+
+
+.card { background: var(--secondary-background); border:2px solid var(--border); border-radius:12px; box-shadow: var(--shadow); }
+.btn { display:inline-flex; align-items:center; gap:.25rem; font-weight:600; padding:.5rem 1rem; border:2px solid var(--border); border-radius:6px; background:var(--main); color:var(--main-foreground); box-shadow:var(--shadow); transition:transform .18s; }
+.btn:hover { transform:translateY(-2px); }
+.btn:active { transform:translateY(0); }
+.btn-alt { background:var(--secondary-background); color:var(--foreground); }
+.code-header { background: var(--main); color: var(--main-foreground); }
+
+body:before { content:""; position:fixed; inset:0; pointer-events:none; background:radial-gradient(circle at 25% 20%, var(--main)/12%, transparent 60%), radial-gradient(circle at 80% 70%, var(--color-chart-2)/10%, transparent 55%); mix-blend-mode:normal; }
+
+.bg-grid-large { background-image: 
+  linear-gradient(var(--border) 1px, transparent 1px),
+  linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 80px 80px;
+  background-position: 0 0, 0 0;
+}
+
+body.bg-grid-large { background-image: 
+  linear-gradient(var(--border) 1px, transparent 1px),
+  linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 80px 80px;
+  background-position: 0 0, 0 0;
+}
+
