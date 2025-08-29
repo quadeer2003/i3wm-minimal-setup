@@ -251,6 +251,13 @@ if [[ -n "$CONFIGS_DIR" && -d "$CONFIGS_DIR" ]]; then
         fi
     fi
     
+    # Copy wallpaper management script
+    if [[ -f "$CONFIGS_DIR/wallpaper.sh" ]]; then
+        cp "$CONFIGS_DIR/wallpaper.sh" ~/.config/wallpaper.sh
+        chmod +x ~/.config/wallpaper.sh
+        print_success "Wallpaper management script copied"
+    fi
+    
     # Copy polybar config
     if [[ -f "$CONFIGS_DIR/polybar.config" ]]; then
         cp "$CONFIGS_DIR/polybar.config" ~/.config/polybar/config.ini
