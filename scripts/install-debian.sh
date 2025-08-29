@@ -121,12 +121,6 @@ if ! command -v nvim &> /dev/null; then
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
     sudo rm -rf /opt/nvim
     sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-    
-    # Add to PATH in fish config
-    if ! grep -q "/opt/nvim-linux-x86_64/bin" ~/.config/fish/config.fish 2>/dev/null; then
-        echo 'set -gx PATH $PATH /opt/nvim-linux-x86_64/bin' >> ~/.config/fish/config.fish
-    fi
-    
     print_success "Neovim installed successfully"
 else
     print_success "Neovim is already installed"
@@ -226,6 +220,12 @@ if [[ -d "$REPO_DIR/configs" ]]; then
     if [[ -f "$REPO_DIR/configs/fish.config" ]]; then
         cp "$REPO_DIR/configs/fish.config" ~/.config/fish/config.fish
         print_success "Fish config copied"
+        
+        # Add Neovim to PATH in fish config
+        if ! grep -q "/opt/nvim-linux-x86_64/bin" ~/.config/fish/config.fish 2>/dev/null; then
+            echo 'set -gx PATH $PATH /opt/nvim-linux-x86_64/bin' >> ~/.config/fish/config.fish
+            print_success "Neovim added to fish PATH"
+        fi
     fi
     
     # Copy polybar config

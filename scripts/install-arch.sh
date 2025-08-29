@@ -77,8 +77,6 @@ print_status "Installing essential tools..."
 sudo pacman -S --needed --noconfirm \
     lightdm \
     lightdm-gtk-greeter \
-    pulseaudio \
-    pulseaudio-alsa \
     networkmanager \
     network-manager-applet \
     xss-lock \
@@ -98,8 +96,6 @@ sudo pacman -S --needed --noconfirm \
 check_aur_helper
 
 print_status "Installing AUR packages..."
-yay -S --needed --noconfirm \
-    albert
 
 # Dev tools
 print_status "Installing development tools..."
@@ -111,12 +107,6 @@ if ! command -v nvim &> /dev/null; then
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
     sudo rm -rf /opt/nvim
     sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-    
-    # Add to PATH in fish config
-    if ! grep -q "/opt/nvim-linux-x86_64/bin" ~/.config/fish/config.fish 2>/dev/null; then
-        echo 'set -gx PATH $PATH /opt/nvim-linux-x86_64/bin' >> ~/.config/fish/config.fish
-    fi
-    
     print_success "Neovim installed successfully"
 else
     print_success "Neovim is already installed"
@@ -135,28 +125,20 @@ mv nvim-dots ~/.config/nvim
 print_success "nvim-dots configuration installed"
 
 # Install Bun
-if ! command -v bun &> /dev/null; then
-    print_status "Installing Bun..."
-    curl -fsSL https://bun.sh/install | bash
-    print_success "Bun installed successfully"
-else
-    print_success "Bun is already installed"
-fi
+# if ! command -v bun &> /dev/null; then
+#     print_status "Installing Bun..."
+#     curl -fsSL https://bun.sh/install | bash
+#     print_success "Bun installed successfully"
+# else
+#     print_success "Bun is already installed"
+# fi
 
-# Install NVM
-if [ ! -d "$HOME/.nvm" ]; then
-    print_status "Installing NVM..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-    print_success "NVM installed successfully"
-else
-    print_success "NVM is already installed"
-fi
+
 
 # Fonts
 print_status "Installing fonts..."
 sudo pacman -S --needed --noconfirm \
     ttf-jetbrains-mono-nerd \
-    ttf-cascadia-code
 
 # Config directories
 print_status "Creating configuration directories..."
@@ -203,6 +185,12 @@ if [[ -d "$REPO_DIR/configs" ]]; then
     if [[ -f "$REPO_DIR/configs/fish.config" ]]; then
         cp "$REPO_DIR/configs/fish.config" ~/.config/fish/config.fish
         print_success "Fish config copied"
+        
+        # Add Neovim to PATH in fish config
+        if ! grep -q "/opt/nvim-linux-x86_64/bin" ~/.config/fish/config.fish 2>/dev/null; then
+            echo 'set -gx PATH $PATH /opt/nvim-linux-x86_64/bin' >> ~/.config/fish/config.fish
+            print_success "Neovim added to fish PATH"
+        fi
     fi
     
     # Copy polybar config
