@@ -165,9 +165,13 @@ print_status "Copying configuration files..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
+# Debug: Show the paths
+print_status "Script directory: $SCRIPT_DIR"
+print_status "Repository directory: $REPO_DIR"
+
 # Check repo structure
 if [[ -d "$REPO_DIR/configs" ]]; then
-    print_status "Found config files, copying to user directories..."
+    print_status "Found config files in $REPO_DIR/configs, copying to user directories..."
     
     # Copy i3 config
     if [[ -f "$REPO_DIR/configs/i3.config" ]]; then
@@ -207,7 +211,9 @@ if [[ -d "$REPO_DIR/configs" ]]; then
     
     print_success "All configuration files copied successfully!"
 else
-    print_warning "Config files not found. Please manually copy configs after installation."
+    print_warning "Config files not found at $REPO_DIR/configs. Please manually copy configs after installation."
+    print_status "Expected configs location: $REPO_DIR/configs"
+    print_status "Current working directory: $(pwd)"
 fi
 
 # Setup wallpapers
