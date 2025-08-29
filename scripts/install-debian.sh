@@ -117,10 +117,12 @@ print_status "Installing development tools..."
 # Install Neovim
 if ! command -v nvim &> /dev/null; then
     print_status "Installing Neovim..."
+    ORIGINAL_DIR="$(pwd)"
     cd /tmp
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
     sudo rm -rf /opt/nvim
     sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+    cd "$ORIGINAL_DIR"
     print_success "Neovim installed successfully"
 else
     print_success "Neovim is already installed"
@@ -133,9 +135,11 @@ if [[ -d ~/.config/nvim ]]; then
     mv ~/.config/nvim ~/.config/nvim.backup
 fi
 
+ORIGINAL_DIR="$(pwd)"
 cd /tmp
 git clone https://github.com/quadeer2003/nvim-dots.git
 mv nvim-dots ~/.config/nvim
+cd "$ORIGINAL_DIR"
 print_success "nvim-dots configuration installed"
 
 # Install development tools
@@ -168,9 +172,11 @@ sudo apt install -y \
 if ! fc-list | grep -i "nerd" > /dev/null; then
     print_status "Installing Nerd Fonts..."
     mkdir -p ~/.local/share/fonts
+    ORIGINAL_DIR="$(pwd)"
     cd /tmp
     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip
     unzip -o JetBrainsMono.zip -d ~/.local/share/fonts/
+    cd "$ORIGINAL_DIR"
     fc-cache -fv
     print_success "Nerd Fonts installed"
 fi
@@ -200,29 +206,42 @@ print_status "Copying configuration files..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
+# Try to find configs in multiple locations
+CONFIGS_DIR=""
+if [[ -d "$REPO_DIR/configs" ]]; then
+    CONFIGS_DIR="$REPO_DIR/configs"
+elif [[ -d "./configs" ]]; then
+    CONFIGS_DIR="./configs"
+elif [[ -d "../configs" ]]; then
+    CONFIGS_DIR="../configs"
+elif [[ -d "/home/$USER/Documents/dot.quadeer.in/my-app/configs" ]]; then
+    CONFIGS_DIR="/home/$USER/Documents/dot.quadeer.in/my-app/configs"
+fi
+
 # Debug: Show the paths
 print_status "Script directory: $SCRIPT_DIR"
 print_status "Repository directory: $REPO_DIR"
+print_status "Looking for configs directory..."
 
 # Check if we're in the correct repository structure
-if [[ -d "$REPO_DIR/configs" ]]; then
-    print_status "Found config files in $REPO_DIR/configs, copying to user directories..."
+if [[ -n "$CONFIGS_DIR" && -d "$CONFIGS_DIR" ]]; then
+    print_status "Found config files in $CONFIGS_DIR, copying to user directories..."
     
     # Copy i3 config
-    if [[ -f "$REPO_DIR/configs/i3.config" ]]; then
-        cp "$REPO_DIR/configs/i3.config" ~/.config/i3/config
+    if [[ -f "$CONFIGS_DIR/i3.config" ]]; then
+        cp "$CONFIGS_DIR/i3.config" ~/.config/i3/config
         print_success "i3 config copied"
     fi
     
     # Copy kitty config
-    if [[ -f "$REPO_DIR/configs/kitty.conf" ]]; then
-        cp "$REPO_DIR/configs/kitty.conf" ~/.config/kitty/kitty.conf
+    if [[ -f "$CONFIGS_DIR/kitty.conf" ]]; then
+        cp "$CONFIGS_DIR/kitty.conf" ~/.config/kitty/kitty.conf
         print_success "Kitty config copied"
     fi
     
     # Copy fish config
-    if [[ -f "$REPO_DIR/configs/fish.config" ]]; then
-        cp "$REPO_DIR/configs/fish.config" ~/.config/fish/config.fish
+    if [[ -f "$CONFIGS_DIR/fish.config" ]]; then
+        cp "$CONFIGS_DIR/fish.config" ~/.config/fish/config.fish
         print_success "Fish config copied"
         
         # Add Neovim to PATH in fish config
@@ -233,22 +252,27 @@ if [[ -d "$REPO_DIR/configs" ]]; then
     fi
     
     # Copy polybar config
-    if [[ -f "$REPO_DIR/configs/polybar.config" ]]; then
-        cp "$REPO_DIR/configs/polybar.config" ~/.config/polybar/config.ini
+    if [[ -f "$CONFIGS_DIR/polybar.config" ]]; then
+        cp "$CONFIGS_DIR/polybar.config" ~/.config/polybar/config.ini
         print_success "Polybar config copied"
     fi
     
     # Copy picom config
-    if [[ -f "$REPO_DIR/configs/picom.config" ]]; then
-        cp "$REPO_DIR/configs/picom.config" ~/.config/picom/picom.conf
+    if [[ -f "$CONFIGS_DIR/picom.config" ]]; then
+        cp "$CONFIGS_DIR/picom.config" ~/.config/picom/picom.conf
         print_success "Picom config copied"
     fi
     
     print_success "All configuration files copied successfully!"
 else
-    print_warning "Config files not found at $REPO_DIR/configs. Please manually copy configs after installation."
-    print_status "Expected configs location: $REPO_DIR/configs"
+    print_warning "Config files not found in any expected location."
+    print_status "Searched locations:"
+    print_status "  - $REPO_DIR/configs"
+    print_status "  - ./configs"
+    print_status "  - ../configs"
+    print_status "  - /home/$USER/Documents/dot.quadeer.in/my-app/configs"
     print_status "Current working directory: $(pwd)"
+    print_warning "Please manually copy configs after installation."
 fi
 
 # Create a sample wallpaper directory with a default wallpaper
