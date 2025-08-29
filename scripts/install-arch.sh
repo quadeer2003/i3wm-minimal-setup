@@ -222,6 +222,13 @@ if [[ -n "$CONFIGS_DIR" && -d "$CONFIGS_DIR" ]]; then
         print_success "Polybar config copied"
     fi
     
+    # Copy polybar launch script
+    if [[ -f "$CONFIGS_DIR/launch.sh" ]]; then
+        cp "$CONFIGS_DIR/launch.sh" ~/.config/polybar/launch.sh
+        chmod +x ~/.config/polybar/launch.sh
+        print_success "Polybar launch script copied"
+    fi
+    
     # Copy picom config
     if [[ -f "$CONFIGS_DIR/picom.config" ]]; then
         cp "$CONFIGS_DIR/picom.config" ~/.config/picom/picom.conf
